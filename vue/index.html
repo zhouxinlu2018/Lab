@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <h1>Document</h1>
+  <style>
+    .active {
+      background: #a10;
+    }
+    .liked {
+      background: grey;
+    }
+  </style>
+</head>
+<body>
+<h1>#  v-show&v-if&v-model的用法</h1>
+<!-- v-前缀的都是指令，放在html的标签里 -->
+<div id="app-0">
+  <div>
+  <input type="text" v-model="name">
+  <span v-show="name">你的名字: {{name}}</span></br>
+  <!--而v-show则是为元素添加属性 style="display:none;-->
+  </div>
+  <div>
+  <input type="text" v-model="age">
+  <!-- v-model提供了表单输入和应用状态的之间的双向绑定 -->
+  <span>你的年龄: {{age}}</span></br>
+  </div>
+  <div>
+  <input type="text" v-model="sex">
+  <span v-if="sex">你的性别：{{sex}}</span></br>
+  <!--使用v-if来隐藏元素，其实是把元素注解掉了23333-->
+  </div>
+</div>
+</br>
+  <h1># v-for用法</h1>
+  <div id="app-1">
+    <ul>
+      <li v-for='food in foodList'>{{food.name}}: ${{food.discount ? food.price * food.discount : food.price}}</li>
+      <!-- 三元操作符 -->
+      <!-- v-for 可以绑定数组的数据来渲染一个项目列表 -->
+    </ul>
+  </div>
+</br>
+<h1>v-bind用法</h1>
+  <div id="app-2">
+    <a href='http://www.baidu.com'>点我</a>
+    <a :class="{active: isActive}" v-bind:href= "url">老司机点点我
+      <img v-bind:src='img'>
+    </a>
+    <!-- v-bind 将这个元素节点的 href特性和Vue实例的 url 属性保持一致 -->
+  </div>
+</br>
+<h1>v-on用法</h1>
+<!-- v-on 是添加一个事件监听器，通过它调用在 Vue 实例中定义的方法 -->
+  <div id='app-3'>
+    <button v-on:click="onClick()">点我点我</button>
+    <button v-on="{mouseenter: onEnter, mouseleave: onOut}">鼠标放在放在上面</button>
+    <form v-on:submit.preventDefault="onSubmit">
+    <input type="text">
+    <button type="submit">提交</button>
+  </form>
+  </div>
+</br>
+  <h1>v-model的使用</h1>
+  <div id=app-4>
+    <input type="text" v-model.number="name">
+    {{name}}
+  </div>
+  <h1>v-model在不同元素的使用</h1>
+  <div id="app-5">
+    <label>
+    男
+    <input v-model="sex" value="male" type="checkbox">
+    </label>
+    <label>
+    女
+    <input v-model="sex" value='female' type="checkbox">
+    </label>
+  </br>
+  {{sex}}
+    <textarea v-model="article"></textarea>
+    <div>你来自哪里？</div>
+    <select v-model='form'>
+      <option value="1">wajiaguo</option>
+      <option value="2">beijiagou</option>
+      <option value="3">xixixixix</option>
+    </select>
+    {{form}}
+    <div>你要去哪里</div>
+    <select v-model="dest" multiple="2">
+      <option value="1">一柄柄</option>
+      <option value="2">二哈哈</option>
+      <option value="3">三嘻嘻</option>
+    </select>
+    {{dest}}
+  </div>
+</br>
+<h1>控制流指令 v-if</h1>
+<div id=app-6>
+  <div v-if="role == 'admin' || role == 'super_admin'">
+    管理员你好
+  </div>
+  <div v-else-if="role == 'hr'">
+    待查看简历
+  </div>
+  <div v-else>
+    您没有权限访问此页面
+  </div>
+</div>
+</br>
+<h1>计算属性computed</h1>
+<div id=app-7>
+  <table border="1">
+    <thead>
+      <th>学科</th>
+      <th>分数</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>数学</td>
+        <td><input type="text" v-model.number='math'></td>
+      </tr>
+      <tr>
+        <td>物理</td>
+        <td><input type="text" v-model.number='physics'></td>
+      </tr>
+      <tr>
+        <td>英语</td>
+        <td><input type="text" v-model.number='english'></td>
+      </tr>
+      <tr>
+        <td>总分</td>
+        <td>{{sum}}</td>
+      </tr>
+      <tr>
+        <td>平均分</td>
+        <td>{{average}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</br>
+<h1>全局及局部组件</h1>
+  <div id="app-8">
+    <alert></alert>
+  </div>
+  <div id="seg1">
+    <alert></alert>
+  </div>
+</br>
+
+<h1>配置组件之点赞按钮实现</h1>
+<div id="applike">
+    <like></like>
+</div>
+<template id="like-component-tpl">
+    <button :class="{liked: liked}" @click="toggle_like">
+        赞 {{like_count}}
+    </button>
+</template>
+</br>
+
+
+<h1>组件通信之父子通信</h1>
+  <div id="app-9">
+    <alert msg="Yoooooo"></alert>
+  </div>
+
+<h1>组件通信之子父通信</h1>
+  <div id="app-10">
+    <balance></balance>
+  </div>
+</br>
+  <h1>同级组件通信</h1>
+  <div id="app11">
+    <huahua></huahua>
+    <shuandan></shuandan>
+  </div>
+</br>
+  <h1>过滤器</h1>
+  <div id="app12">
+    <div>
+      <input type="text" v-model='length'> mm
+      {{length | meter}}
+    </div>
+    <input type="text" v-model="price">
+    {{ price | currency("USD") }}
+  </div>
+
+
+<script src="lib/vue.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

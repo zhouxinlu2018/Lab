@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <title>Number guessing game</title>
+
+    <style>
+      html {
+        font-family: sans-serif;
+      }
+      body {
+        width: 50%;
+        max-width: 800px;
+        min-width: 480px;
+        margin: 0 auto;
+      }
+      .lastResult {
+        color: white;
+        padding: 3px;
+      }
+    </style>
+  </head>
+
+  <body>
+      <h1>Number guessing game</h1>
+
+      <p>We have selected a random number between 1 and 100. See if you can guess it in 10 turns or fewer. We'll tell you if your guess was too high or too low.</p>
+
+<div class="form">
+  <label for="guessField">Enter a guess: </label><input type="text" id="guessField" class="guessField">
+  <input type="submit" value="Submit guess" class="guessSubmit">
+</div>
+
+<div class="resultParas">
+  <p class="guesses"></p>
+  <p class="lastResult"></p>
+  <p class="lowOrHi"></p>
+</div>
+
+<script>
+    //先定义变量
+    
+    //随机数
+    var randomNumber = Math.floor(Math.random() * 100) + 1;
+      //random函数只能产生0-1的随机数 先乘上一百 向下取整 扩大再+1 成为1-100
+    //玩家猜测的数字
+    var guesses = document.querySelector('.guesses');
+    //最后结果 赢或输?
+    var lastResult = document.querySelector('.lastResult');
+    //提示数字高还是低
+    var lowOrHi = document.querySelector('.lowOrHi');
+    //提交按钮
+    
+    var guessSubmit = document.querySelector('.guessSubmit');
+    //玩家填入数字的输入框//
+    var guessField = document.querySelector('.guessField');
+    //初始化次数
+    var guessCount = 1;
+    //重置游戏按钮
+    var resetButton;
+    
+    guessField.focus();
+    
+    //函数
+    
+    function checkGuess() {
+        //确保用户输入的类型为数字
+        var userGuess = Number(guessField.value);
+        //第一次
+        if (guessCount === 1) {
+            //初始化 之前猜测数字 栏
+            guesses.textContent = 'Previous guesses: ';
+        }
+        //显示玩家之前猜测的数字
+        guesses.textContent += userGuess + ' ';
+        //如果 猜对了
+        if (userGuess === randomNumber) {
+            //显示 恭喜
+            lastResult.textContent = 'Congratulations! You got it right!';
+            //变色
+            lastResult.style.backgroundColor = 'green';
+            //低或高信息 显示为空
+            lowOrHi.textContent = '';
+            //游戏结束
+            setGameOver();
+        }
+        //最后一次猜数字
+        else if (guessCount === 10) {
+            //宣布游戏结束
+            lastResult.textContent = '!!!Game over!!!';
+            //调用结束函数
+            setGameOver();
+        }
+        else {
+            //显示错误 变色
+            lastResult.textContent = 'Wrong!';
+            lastResult.style.backgroundColor = 'red';
+            //判断大小
+            if(userGuess < randomNumber) {
+                lowOrHi.textContent = 'Last guess was too low!';
+            }
+            else if(userGuess > randomNumber) {
+                lowOrHi.textContent = 'Last guess was too high!';
+            }
+        }
+        
+        //轮数+1
+        guessCount++;
+        //清空数字输入框
+        guessField.value = '';
+        //焦点放入输入框
+        guessField.focus();
+    }
+    
+    guessSubmit.addEventListener('click', checkGuess);
+    
+    //游戏结束函数
+    function setGameOver() {
+        //禁用输入框 和 提交按钮
+        guessField.disabled = true;
+        guessSubmit.disabled = true;
+        //创建按钮元素
+        resetButton = document.createElement('button');
+        //按钮元素添加文本
+        resetButton.textContent = 'Start new game';
+        //在body内添加resetButton的子节点
+        document.body.appendChild(resetButton);
+        //绑一个事件监听器
+        resetButton.addEventListener('click', resetGame);
+    }
+    
+    //重置游戏函数
+    function resetGame() {
+        //重置游戏轮数
+        guessCount = 1;
+        //结果段落变量
+        var resetParas = document.querySelectorAll('.resultParas p');
+        //循环 逐行删除信息段落//
+        for (var i = 0 ; i < resetParas.length ; i++) {
+            resetParas[i].textContent = '';
+        }
+        //移除resetBuuton
+        resetButton.parentNode.removeChild(resetButton);
+        //启用表单元素，并清空和聚焦文本字段，准备接受用户的新猜测
+        guessField.disabled = false;
+        guessSubmit.disabled = false;
+        guessField.value = '';
+        guessField.focus();
+        //清除背景色
+        lastResult.style.backgroundColor = 'white';
+        //重新生成随机数
+        randomNumber = Math.floor(Math.random() * 100) +1;
+    }
+</script>
+</body>
+</html>
